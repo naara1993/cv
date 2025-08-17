@@ -5,6 +5,9 @@ WORKDIR /workspace/app
 # Copiar solo lo necesario para construir
 COPY mvnw .
 COPY .mvn .mvn
+# Añadir permiso de ejecución al wrapper de Maven
+RUN chmod +x mvnw  # ¡CORRECCIÓN AQUÍ!
+
 COPY pom.xml .
 COPY src src
 
