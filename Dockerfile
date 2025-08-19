@@ -14,8 +14,10 @@ COPY pom.xml .
 COPY src src
 
 # Da permisos y construye
-RUN chmod +x mvnw && \
-    ./mvnw clean package -DskipTests
+
+
+RUN ./mvnw clean package -DskipTests -Dfile.encoding=UTF-8
+
 
 # Imagen final más ligera
 FROM eclipse-temurin:17-jre-alpine
