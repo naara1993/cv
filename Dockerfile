@@ -1,34 +1,32 @@
-# Fase de construcción
-FROM eclipse-temurin:17-jdk-alpine as build
+# Usa una imagen más compatible
+FROM eclipse-temurin:17-jdk-alpine as builder
 
-# Configurar variables de entorno para la codificación
+# Configura variables de entorno
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-WORKDIR /workspace/app
+WORKDIR /app
 
-# Copiar solo lo necesario para construir
+# Copia los archivos necesarios
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 
-# Dar permisos de ejecución al mvnw
-RUN chmod +x mvnw
+# Da permisos y construye
+RUN chmod +x mvnw && \
+    ./mvnw clean package -DskipTests
 
-# Construir la aplicación
-RUN ./mvnw clean package -DskipTests
-
-# Fase de producción
+# Imagen final más ligera
 FROM eclipse-temurin:17-jre-alpine
-VOLUME /tmp
+
 WORKDIR /app
 
-# Copiar el jar construido
-COPY --from=build /workspace/app/target/*.jar app.jar
+# Copia el jar
+COPY --from=builder /app/target/*.jar app.jar
 
-# Exponer el puerto
+# Expone el puerto
 EXPOSE 8080
 
-# Punto de entrada
+# Ejecuta la app
 ENTRYPOINT ["java", "-jar", "app.jar"]
