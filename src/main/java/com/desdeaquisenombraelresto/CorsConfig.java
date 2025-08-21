@@ -13,7 +13,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000") // URL de tu frontend
+                          .allowedOrigins(
+                            "https://cvonline-1993.web.app",
+                            "https://cvonline-1993.firebaseapp.com",
+                            "http://localhost:3000"  // Para desarrollo local
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
